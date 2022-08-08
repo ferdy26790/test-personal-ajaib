@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchLoading, fetchSuccess } from './store/ListData'
 import { getListData } from './api';
 import { mappingListData } from './helper';
+// import './App.css';
 import InputType from './components/InputType';
 
 
@@ -43,32 +44,32 @@ function App() {
     })
   }, [hitParams])
   return (
-    <div className="App">
-      <header className="App-header">
-       <Grid container spacing='16'>
-        
-        <Grid item>
-          <InputType
-            type='text'
-            label='Search'
-            handleChange={(event) => handleSelectFilter({gender: event.target.value})}
-          />
+      <div className="App">
+        <header className="App-header">
+        <Grid container spacing='16'>
+          
+          <Grid item>
+            <InputType
+              type='text'
+              label='Search'
+              handleChange={(event) => handleSelectFilter({gender: event.target.value})}
+            />
+          </Grid>
+          <Grid item>
+            <InputType
+              type='select'
+              label='Gender'
+              options={genderOptions}
+              value={hitParams.gender}
+              handleChange={(value) => handleSelectFilter({gender: value})}
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-          <InputType
-            type='select'
-            label='Gender'
-            options={genderOptions}
-            value={hitParams.gender}
-            handleChange={(value) => handleSelectFilter({gender: value})}
-          />
-        </Grid>
-       </Grid>
-      </header>
-      <div>
-        <Table data={data} loading={loading}/>
+        </header>
+        <div>
+          <Table data={data} loading={loading}/>
+        </div>
       </div>
-    </div>
   );
 }
 

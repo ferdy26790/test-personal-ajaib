@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { MenuItem } from '@mui/material';
 import { debounce } from 'lodash';
 
-const FilterInput = ({label, handleChange, value, options}) => {
+export const FilterInput = ({label, handleChange, value, options}) => {
     return <TextField
             select
             id="outlined-search"
@@ -20,12 +20,13 @@ const FilterInput = ({label, handleChange, value, options}) => {
             </TextField>
 }
 
-const InputText = ({label, handleChange}) => {
+export const InputText = ({label, handleChange}) => {
     const debounceHandleChange = React.useCallback(
         debounce(handleChange, 300)
     ,[])
     return <TextField
     id="outlined-search"
+    className="test"
     label={label}
     onChange={debounceHandleChange}
   />
