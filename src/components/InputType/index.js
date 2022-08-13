@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { MenuItem } from '@mui/material';
 import { debounce } from 'lodash';
 
-export const FilterInput = ({label, handleChange, value, options}) => {
+const FilterInput = ({label, handleChange, value, options}) => {
     return <TextField
             select
             id="outlined-search"
@@ -14,13 +14,15 @@ export const FilterInput = ({label, handleChange, value, options}) => {
             value={value}
             onChange={(e) => {
                 handleChange(e.target.value)
-            }}
-            >
-                {options.map((o) => <MenuItem key={o.value} value={o.value}>{o.label}</MenuItem>)}
+            }}>
+                {
+                  options.map((o) => <MenuItem key={o.value}
+                                               value={o.value}>{o.label}</MenuItem>)
+                }
             </TextField>
 }
 
-export const InputText = ({label, handleChange}) => {
+const InputText = ({label, handleChange}) => {
     const debounceHandleChange = React.useCallback(
         debounce(handleChange, 300)
     ,[])
@@ -34,8 +36,13 @@ export const InputText = ({label, handleChange}) => {
 
 export default function InputType({type, label, handleChange, value, options}) {
   const INPUT_TYPE_COMPONENTS = {
-    select: <FilterInput label={label} handleChange={handleChange} options={options} value={value}/>,
-    text: <InputText label={label} handleChange={handleChange} value={value}/>
+    select: <FilterInput label={label}
+                         handleChange={handleChange}
+                         options={options}
+                         value={value}/>,
+    text: <InputText label={label}
+                     handleChange={handleChange}
+                     value={value}/>
   }
   return INPUT_TYPE_COMPONENTS[type] || null
 }

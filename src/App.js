@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchLoading, fetchSuccess } from './store/ListData'
 import { getListData } from './api';
 import { mappingListData } from './helper';
-// import './App.css';
+import './App.css';
 import InputType from './components/InputType';
 
 

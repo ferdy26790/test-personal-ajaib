@@ -1,11 +1,9 @@
 
-import InputType, { FilterInput, InputText } from '../components/InputType';
+import InputType from '../components/InputType';
 import * as React from 'react';
-import { mount, shallow } from 'enzyme';
-import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import '../setupTests';
-import { TextField } from '@mui/material';
-import debounce from 'lodash/debounce';
+
 
 // Tell Jest to mock this import
 jest.mock('lodash/debounce');
@@ -24,45 +22,78 @@ const colorOptions = [
         value: "blue"
     }
 ]
-jest.useFakeTimers();
-describe('<InputType />', () => {
+
+
+describe('Test <InputType />', () => {
     it("Should render input text by given type correctly", () => {
         const spy = jest.fn();
-        const wrapper = shallow(<InputType type="text" label="search" value="test" handleChange={() => {spy}} />);
-        expect(wrapper.prop('label')).toEqual("search");
-        expect(wrapper.containsAnyMatchingElements(<InputText />))
-
+        const wrapper = mount(<InputType type="text" 
+                                         label="search"
+                                         value=""
+                                         handleChange={() => {spy}} />);
+        expect(wrapper.prop('type')).toEqual("text");
+        expect(wrapper.children().props().value).toBe("");
+        expect(wrapper.children().props().label).toBe("search");
+        expect(wrapper.children()
+                      .children()
+                      .children()
+                      .find('input').props().value).toBeUndefined();
     });
 
     it("Should render input text by given type correctly", () => {
         const spy = jest.fn();
-        const wrapper = shallow(
+        const wrapper = mount(
             <InputType type="select"
                        label="color"
                        options={colorOptions}
                        value="green" 
-                       handleChange={() => {jest.fn()}} />
+                       handleChange={ spy } />
         );
-        expect(wrapper.prop('label')).toEqual("color");
-        expect(wrapper.containsAnyMatchingElements(<FilterInput />))
-
+        expect(wrapper.props().type).toBe("select");
+        expect(wrapper.children().props().value).toBe("green");
+        expect(wrapper.children().props().label).toBe("color");
+        expect(wrapper.children().props().options).toBe(colorOptions);
+        expect(wrapper.children()
+                      .children()
+                      .children()
+                      .find('input').props().value).toBe("green");
     });
 
-    it("Should trigger handleChange method", () => {
-        const spy = jest.fn();
-        // debounce.mockImplementation(spy)
-        const wrapper = mount(<InputType type="text" label="search" value="test" handleChange={() => {spy}} />);
-        // <InputText label="search" value="test" handleChange={() => {spy}} />);
-        expect(wrapper.find(InputText).find(TextField).render().find('input')).toHaveLength(1);
-        console.log("-------- inputtt", wrapper.find(InputText).find(TextField).find('input').target);
-        
-        wrapper.find(InputText).find(TextField).find('input').simulate('change', { target: { value: "Claire" } });
-        // jest.runAllTimers(300);
-        
-        // expect(spy).toHaveBeenCalled();
+    it("Should trigger handleChange method - text input", async() => {
+        const spy = jest.fn(console.log('func called'));
+        const wrapper = mount(<InputType type="text"
+                                         label="search" 
+                                         value="test" 
+                                         handleChange={() => {spy}} />);
+        // Trigger onChange update value
+        wrapper.children()
+               .children()
+               .children()
+               .find('input')
+               .simulate('change', { target: { value: 'Claire'} })
 
+        setTimeout(() => {
+            expect(spy).toHaveBeenCalled();
+            done();
+          }, 300);
     });
 
+    it("Should trigger handleChange method - filter input", async() => {
+        const spy = jest.fn(console.log('func called'));
+        const wrapper = mount(<InputType type="select"
+                                         label="color"
+                                         options={colorOptions}
+                                         value="green" 
+                                         handleChange={ spy } />);
 
+        // Trigger onChange update the value
+        wrapper.children()
+               .children()
+               .children()
+               .find('input')
+               .simulate('change', { target: { value: 'blue'} })
+        wrapper.update();
+        expect(spy).toHaveBeenCalled();
+    });
 });
 
