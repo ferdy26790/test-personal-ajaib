@@ -14,9 +14,11 @@ const FilterInput = ({label, handleChange, value, options}) => {
             value={value}
             onChange={(e) => {
                 handleChange(e.target.value)
-            }}
-            >
-                {options.map((o) => <MenuItem key={o.value} value={o.value}>{o.label}</MenuItem>)}
+            }}>
+                {
+                  options.map((o) => <MenuItem key={o.value}
+                                               value={o.value}>{o.label}</MenuItem>)
+                }
             </TextField>
 }
 
@@ -26,6 +28,7 @@ const InputText = ({label, handleChange}) => {
     ,[])
     return <TextField
     id="outlined-search"
+    className="test"
     label={label}
     onChange={debounceHandleChange}
   />
@@ -33,8 +36,13 @@ const InputText = ({label, handleChange}) => {
 
 export default function InputType({type, label, handleChange, value, options}) {
   const INPUT_TYPE_COMPONENTS = {
-    select: <FilterInput label={label} handleChange={handleChange} options={options} value={value}/>,
-    text: <InputText label={label} handleChange={handleChange} value={value}/>
+    select: <FilterInput label={label}
+                         handleChange={handleChange}
+                         options={options}
+                         value={value}/>,
+    text: <InputText label={label}
+                     handleChange={handleChange}
+                     value={value}/>
   }
   return INPUT_TYPE_COMPONENTS[type] || null
 }
